@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+
+class Slots {
+private:
+    std::vector<std::vector<bool> > seats;
+
+public:
+    Slots(int numRows, int numCols) {
+        seats.resize(numRows, std::vector<bool>(numCols, false));
+    }
+
+    void displaySeats() {
+        std::cout << "Parking Slots:" << std::endl;
+        for (int row = 0; row < seats.size(); ++row) {
+            for (int col = 0; col < seats[row].size(); ++col) {
+                if (seats[row][col]) {
+                    std::cout << "X ";
+                } else {
+                    std::cout << "O ";
+                }
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    bool bookSeat(int row, int col) {
+        if (row < 1 || row > seats.size() || col < 1 || col > seats[0].size()) {
+            std::cout << "Invalid slot selection." << std::endl;
+            return false;
+        }
+
+        if (seats[row - 1][col - 1]) {
+            std::cout << "Slot " << row << "-" << col << " is already booked." << std::endl;
+            return false;
+        }
+
+        seats[row - 1][col - 1] = true;
+        std::cout << "Slot " << row << "-" << col << " booked successfully." << std::endl;
+        return true;
+    }
+};
+
+int main() {
+    int numRows, numCols;
+
+    std::cout << "Enter the number of rows and coloumns: ";
+    std::cin >> numRows;
+
+    std::cin >> numCols;
+
+    Slots s(numRows, numCols);
+
+    int choice;
+    do {
+        std::cout << "AutoSwiftSpot" << std::endl;
+        std::cout << "1. Display available slots" << std::endl;
+        std::cout << "2. Book a slot" << std::endl;
+        std::cout << "3. Quit" << std::endl;
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                s.displaySeats();
+                break;
+            case 2:
+                int row, col;
+                std::cout << "Enter the row and column of the slot you want to book (e.g., 2 5): ";
+                std::cin >> row >> col;
+                s.bookSeat(row, col);
+                break;
+            case 3:
+                std::cout << "Thank you for using our system." << std::endl;
+                break;
+            default:
+                std::cout << "Invalid choice. Please try again." << std::endl;
+        }
+    } while (choice != 3);
+
+    return 0;
+}
